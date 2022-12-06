@@ -1,0 +1,87 @@
+NeenOpal Task-1: Records matching Task
+#Importing the required libraries
+import numpy as np
+import pandas as pd
+data1=pd.read_csv(r'C:\Users\OWNER\Downloads\Data1.csv')
+data2=pd.read_csv(r'C:\Users\OWNER\Downloads\Data2.csv')
+print(data1),(data2)
+
+            Order ID       Product ID  Qty
+0     CA-2014-100006  TEC-PH-10002075    3
+1     CA-2014-100090  FUR-TA-10003715    3
+2     CA-2014-100090  OFF-BI-10001597    6
+3     CA-2014-100293  OFF-PA-10000176    6
+4     CA-2014-100328  OFF-BI-10000343    1
+...              ...              ...  ...
+9473  US-2017-169551  OFF-PA-10004100    3
+9474  US-2017-169551  OFF-ST-10004835    3
+9475  US-2017-169551  TEC-AC-10002018    3
+9476  US-2017-169551  TEC-AC-10003033    2
+9477  US-2017-169551  TEC-PH-10001363    2
+
+[9478 rows x 3 columns]
+(None,
+             Order ID       Product ID  Qty
+ 0     CA-2014-100090  FUR-TA-10003715    3
+ 1     CA-2014-100090  OFF-BI-10001597    6
+ 2     CA-2014-100293  OFF-PA-10000176    6
+ 3     CA-2014-100328  OFF-BI-10000343    1
+ 4     CA-2014-100363  OFF-FA-10000611    2
+ ...              ...              ...  ...
+ 9474  US-2017-169551  OFF-PA-10004100    3
+ 9475  US-2017-169551  OFF-ST-10004835    3
+ 9476  US-2017-169551  TEC-AC-10002018    3
+ 9477  US-2017-169551  TEC-AC-10003033    2
+ 9478  US-2017-169551  TEC-PH-10001363    2
+ 
+ [9479 rows x 3 columns])
+Combining Order ID + Product ID of data1
+data1['OP ID1']=data1['Order ID']+ "" +data1['Product ID']
+data1.head()
+Order ID	Product ID	Qty	OP ID1
+0	CA-2014-100006	TEC-PH-10002075	3	CA-2014-100006TEC-PH-10002075
+1	CA-2014-100090	FUR-TA-10003715	3	CA-2014-100090FUR-TA-10003715
+2	CA-2014-100090	OFF-BI-10001597	6	CA-2014-100090OFF-BI-10001597
+3	CA-2014-100293	OFF-PA-10000176	6	CA-2014-100293OFF-PA-10000176
+4	CA-2014-100328	OFF-BI-10000343	1	CA-2014-100328OFF-BI-10000343
+Combining Order ID +Product ID of data2
+data2['OP ID2']=data2['Order ID']+""+data2['Product ID']
+data2.head()
+Order ID	Product ID	Qty	OP ID2
+0	CA-2014-100090	FUR-TA-10003715	3	CA-2014-100090FUR-TA-10003715
+1	CA-2014-100090	OFF-BI-10001597	6	CA-2014-100090OFF-BI-10001597
+2	CA-2014-100293	OFF-PA-10000176	6	CA-2014-100293OFF-PA-10000176
+3	CA-2014-100328	OFF-BI-10000343	1	CA-2014-100328OFF-BI-10000343
+4	CA-2014-100363	OFF-FA-10000611	2	CA-2014-100363OFF-FA-10000611
+Combine data1 and data2
+merge_data
+merge_data=data1.merge(data2,how='outer',left_on=['OP ID1'],right_on=['OP ID2'])
+merge_data.head()
+Order ID_x	Product ID_x	Qty_x	OP ID1	Order ID_y	Product ID_y	Qty_y	OP ID2
+0	CA-2014-100006	TEC-PH-10002075	3.0	CA-2014-100006TEC-PH-10002075	NaN	NaN	NaN	NaN
+1	CA-2014-100090	FUR-TA-10003715	3.0	CA-2014-100090FUR-TA-10003715	CA-2014-100090	FUR-TA-10003715	3.0	CA-2014-100090FUR-TA-10003715
+2	CA-2014-100090	OFF-BI-10001597	6.0	CA-2014-100090OFF-BI-10001597	CA-2014-100090	OFF-BI-10001597	6.0	CA-2014-100090OFF-BI-10001597
+3	CA-2014-100293	OFF-PA-10000176	6.0	CA-2014-100293OFF-PA-10000176	CA-2014-100293	OFF-PA-10000176	6.0	CA-2014-100293OFF-PA-10000176
+4	CA-2014-100328	OFF-BI-10000343	1.0	CA-2014-100328OFF-BI-10000343	CA-2014-100328	OFF-BI-10000343	1.0	CA-2014-100328OFF-BI-10000343
+Question_(1) How to identify the Records (Order ID + Product ID combination) present in data1 but missing in data2 (Specify the number of records missing in your answer)
+Answer1: 507
+Answer1=set(data1['OP ID1']).difference(set(data2['OP ID2']))
+print(len(Answer1))
+507
+Question_(2) How to identify the Records (Order ID + Product ID combination) missing in data1 but present in data2 (Specify the number of records missing in your answer)
+Answer2: 508
+Answer2
+Answer2 = merge_data[merge_data['OP ID1'].isna()]
+Answer2.shape[0]
+     
+508
+Question_(3) Find the Sum of the total Qty of Records missing in data1 but present in data2
+Answer3: 1956.0
+Sum_of_Qty_Records=Answer2['Qty_y'].sum()
+print(Sum_of_Qty_Records)
+1956.0
+Question_(4) Find the total number of unique records (Order ID + Product ID combination) present in the combined dataset of data1 and data2
+Answer4: 9986
+0
+merge_data.shape[0]
+9986
